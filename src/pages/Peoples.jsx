@@ -1,15 +1,16 @@
 import {useState, useEffect, useRef} from "react";
 import axios from "axios";
 
-const HomePage = () => {
+const SWPeoples = () => {
 
-  const [peoples, setPeoples] = useState([])
+    const [peoples, setPeoples] = useState([])
     const [linkNextPage, setLinkNextPage] = useState()
     const [linkPreviousPage, setLinkPreviousPage] = useState()
     const [total, setTotal] =useState(0)
     const [limit, setLimit] = useState(10)
     const [pages, setPages] = useState([])
-    let [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [searchPeople, setSearchPeople] = useState("")
 
     const getPeople = () => {
         axios.get(`https://swapi.dev/api/people/?page=${currentPage}`, {})
@@ -18,7 +19,7 @@ const HomePage = () => {
                 setLinkNextPage(res.data.next)
                 setTotal(res.data.count)
                 numberPageCurrent(res.data.count)
-                console.log(res)
+
             })
 
             .catch((error) => {
@@ -32,7 +33,7 @@ const HomePage = () => {
                 setPeoples(res.data.results)
                 setLinkNextPage(res.data.next)
                 setLinkPreviousPage(res.data.previous)
-                console.log(res)
+
             })
 
             .catch((error) => {
@@ -48,8 +49,15 @@ const HomePage = () => {
 
             })
     }
-    const indexPaginate =() => {
-        axios.get(`https://swapi.dev/api/people/?page=${currentPage}`)
+    const search = () => {
+        axios.get(`https://swapi.dev/api/people/?search=${searchPeople.searchPeople}`, {})
+            .then ( (res) => {
+                console.log(res)
+                setPeoples(res.data.results)
+                setLinkNextPage(res.data.next)
+                numberPageCurrent(res.data.count)
+                console.log(searchPeople)
+            })
     }
 
     const numberPageCurrent = (total) => {
@@ -68,8 +76,21 @@ const HomePage = () => {
     },[currentPage])
 
     return (
-        <div className="container">
-            <h1 className="d-flex justify-content-center bg-black w-100 text" style={{color:"#f9e813"}}>Star Wars</h1>
+        <div className="container mt-3">
+            <div style={{marginBottom:4}} className="input-group">
+                <input style={{outline:"none",
+                    border:"1px solid #969CB2",
+                    width:"33.43%",
+                    borderTopLeftRadius:"0.275rem"}}
+                       type="text"
+                       placeholder="Busque seu personagem"
+                       onChange={(e) => {setSearchPeople({searchPeople: e.target.value})}}
+
+                />
+                <button className="btn btn-secondary"
+                        type="button"
+                        onClick={search}>Procurar</button>
+            </div>
                 {peoples.map((people) => {
                     return (
                         <span className="card-body card my-1 col-12 col-md-6 col-lg-4 col-sm-6 d-inline-block justify-content-around" >
@@ -88,7 +109,7 @@ const HomePage = () => {
                     </div>
                     <div className="page-item">
                         {pages.map((page) => (
-                            <div className="page-link d-inline-block " style={{cursor:"pointer"}} key={page} onClick={() => setCurrentPage(page)}>{page}</div>
+                            <div className="page-link d-inline-block " style={{cursor:"pointer"}} onClick={() => setCurrentPage(page)}>{page}</div>
                         ))}
                     </div>
                     <div className="page-item">
@@ -99,4 +120,4 @@ const HomePage = () => {
         </div>
     )
 }
-export default HomePage
+export default SWPeoples
