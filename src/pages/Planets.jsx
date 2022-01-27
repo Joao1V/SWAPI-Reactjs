@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import axios from "axios";
-import {Button, Modal} from "react-bootstrap";
+import {Button, Modal, Pagination} from "react-bootstrap";
 import ModalResidentsPlanet from "../components/ModalResidentsPlanet";
 
 const Planets = () => {
@@ -8,8 +8,6 @@ const Planets = () => {
     const [planets, setPlanets] = useState([])
     const [show, setShow] = useState(false)
     const [resident, setResident] = useState([])
-    const [residentFilter, setResidentFilter] = useState([])
-
 
     const handleShow = () => setShow(true)
     const handleClose = () => setShow(false)
@@ -23,14 +21,40 @@ const Planets = () => {
     }
 
     const getResidents = (listResidents) => {
-        setResident(listResidents)
+        let arr = []
+        if (listResidents.length == 0) {
+            arr = [<p style={{color:"red", margin:"auto"}}>Não existe habitantes nesse planeta</p>]
+        } else if (listResidents.length >= 1) {
+            for (let i = 0 ; i < listResidents.length ; i++) {
 
+                axios.get(`${listResidents[i]}`, {})
+
+                    .then((res) => {
+                        let aux = res.data.name
+                        arr.push(aux)
+                    })
+
+                    .catch((error)=> {
+                        console.log(error)
+                    })
+            }
+        }
+        setResident(arr)
     }
+
+    let active = 1;
+    let items = [];
+    for (let number = 1; number <= 5; number++) {
+    items.push(
+        <Pagination.Item key={number} active={number === active}>
+        {number}
+        </Pagination.Item>,
+    );
+}
 
     useEffect(() => {
         getPlanets()
-    }, [])
-
+    }, [resident])
 
     console.log(resident)
 
@@ -40,7 +64,7 @@ const Planets = () => {
 
                 return (
                     <span
-                        className="card-body card my-1 col-12 col-md-6 col-lg-4 col-sm-6 d-inline-block justify-content-around">
+                        className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-4  d-inline-block ">
                         <div key={i}> #{i}
                             <h1 className="fs-3">{planet.name}</h1>
                             <p className="card-text">População: {planet.population}</p>
@@ -65,12 +89,13 @@ const Planets = () => {
                 <Modal show={show} onHide={handleClose} centered aria-labelledby="contained-modal-title-vcenter" style={{boxSizing:"border-box"}}>
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
-                            Habitantes
+                            Habitantes do Planeta
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>{resident}</p>
-                        <p>{resident}</p>
+                        <div>
+                            {resident.map((residents) => <p>{residents}</p>)}
+                        </div>
 
                     </Modal.Body>
                     <Modal.Footer>
@@ -79,7 +104,18 @@ const Planets = () => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
+            <div>
+                <div style={{display:"flex", justifyContent:"center", marginTop:"12px"}}>
+                   
+                    <Pagination>
+                    <div className="page-link " style={{cursor:"pointer"}} >Anterior</div>
+                    {items}
+                    <div className="page-link " style={{cursor:"pointer"}} >Próximo</div>
 
+                    </Pagination>
+                </div>
+                    
+            </div>
         </div>
     )
 }
