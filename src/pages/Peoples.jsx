@@ -1,30 +1,38 @@
 import {useState, useEffect, useRef} from "react";
 import axios from "axios";
+import LoadingSpinner from "../components/Loading";
 
 const SWPeoples = () => {
 
     const [peoples, setPeoples] = useState([])
-    const [linkNextPage, setLinkNextPage] = useState()
-    const [linkPreviousPage, setLinkPreviousPage] = useState()
+    const [pages, setPages] = useState([])
+
+    const [currentPage, setCurrentPage] = useState(1)
     const [total, setTotal] =useState(0)
     const [limit, setLimit] = useState(10)
-    const [pages, setPages] = useState([])
-    const [currentPage, setCurrentPage] = useState(1)
+    const [linkNextPage, setLinkNextPage] = useState()
+    const [linkPreviousPage, setLinkPreviousPage] = useState()
+
     const [searchPeople, setSearchPeople] = useState("")
+
+    const [loading, setLoading] = useState(true)
 
     const getPeople = () => {
         axios.get(`https://swapi.dev/api/people/?page=${currentPage}`, {})
             .then ( (res) => {
                 setPeoples(res.data.results)
                 setLinkNextPage(res.data.next)
-                setTotal(res.data.count)
+
                 numberPageCurrent(res.data.count)
+                setLoading(false)
 
             })
 
             .catch((error) => {
                 console.log(error)
             })
+
+
     }
 
     const nextPage= () => {
@@ -91,17 +99,22 @@ const SWPeoples = () => {
                         type="button"
                         onClick={search}>Procurar</button>
             </div>
-                {peoples.map((people) => {
-                    return (
-                        <span className="card-body card my-1 col-12 col-md-6 col-lg-4 col-sm-6 d-inline-block justify-content-around" >
-                            <h1 className="fs-3 ">{people.name}</h1>
-                            <div className="card-text">Altura: {people.height}</div>
-                            <div className="card-text">Peso: {people.mass}</div>
-                            <div className="card-text">Cor dos olhos: {people.eye_color}</div>
-                            <div className="card-text">Data de nascimento: {people.birth_year}</div>
-                        </span>
-                    )
-                })}
+            {loading ? <LoadingSpinner loading={loading}/> :
+                <div>
+                    {peoples.map((people) => {
+                        return (
+                            <span className="card-body card my-1 col-12 col-md-6 col-lg-4 col-sm-6 d-inline-block justify-content-around" >
+                                <h1 className="fs-3 ">{people.name}</h1>
+                                <div className="card-text">Altura: {people.height}</div>
+                                <div className="card-text">Peso: {people.mass}</div>
+                                <div className="card-text">Cor dos olhos: {people.eye_color}</div>
+                                <div className="card-text">Data de nascimento: {people.birth_year}</div>
+                            </span>
+                        )
+                    })}
+                </div>
+            }
+
             <nav className="d-flex justify-content-center align-items-center my-4">
                 <div className="pagination ">
                     <div className="page-item">

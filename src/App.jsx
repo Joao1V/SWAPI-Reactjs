@@ -10,7 +10,7 @@ import Home from "./pages/Home";
 
 const App = () => {
   return (
-    <div style={{backgroundColor: "#F0F2F5"}}>
+    <div style={{backgroundColor: "#F0F2F5" , height:"100vh"}}>
         <NavbarComp/>
         <Routes>
                 <Route path="/" element={<Home/>}/>
