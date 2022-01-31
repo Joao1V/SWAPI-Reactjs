@@ -8,7 +8,6 @@ const SWPeoples = () => {
     const [pages, setPages] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
-    const [total, setTotal] =useState(0)
     const [limit, setLimit] = useState(10)
     const [linkNextPage, setLinkNextPage] = useState()
     const [linkPreviousPage, setLinkPreviousPage] = useState()
@@ -22,7 +21,6 @@ const SWPeoples = () => {
             .then ( (res) => {
                 setPeoples(res.data.results)
                 setLinkNextPage(res.data.next)
-
                 numberPageCurrent(res.data.count)
                 setLoading(false)
 
@@ -85,30 +83,31 @@ const SWPeoples = () => {
 
     return (
         <div className="container mt-3">
-            <div style={{marginBottom:4}} className="input-group">
+            <h1 style={{fontFamily:"Roboto", fontWeight:500}}>Characters</h1>
+            <div style={{marginBottom:4, fontFamily:"Roboto", fontWeight:200}} className="input-group">
                 <input style={{outline:"none",
                     border:"1px solid #969CB2",
                     width:"33.43%",
                     borderTopLeftRadius:"0.275rem"}}
                        type="text"
-                       placeholder="Busque seu personagem"
+                       placeholder="Find your character"
                        onChange={(e) => {setSearchPeople({searchPeople: e.target.value})}}
 
                 />
                 <button className="btn btn-secondary"
                         type="button"
-                        onClick={search}>Procurar</button>
+                        onClick={search}>Search</button>
             </div>
             {loading ? <LoadingSpinner loading={loading}/> :
                 <div>
                     {peoples.map((people) => {
                         return (
-                            <span className="card-body card my-1 col-12 col-md-6 col-lg-4 col-sm-6 d-inline-block justify-content-around" >
-                                <h1 className="fs-3 ">{people.name}</h1>
-                                <div className="card-text">Altura: {people.height}</div>
-                                <div className="card-text">Peso: {people.mass}</div>
-                                <div className="card-text">Cor dos olhos: {people.eye_color}</div>
-                                <div className="card-text">Data de nascimento: {people.birth_year}</div>
+                            <span style={{fontFamily:"Roboto", fontWeight:300}} className="card-body card my-1 col-12 col-md-6 col-lg-4 col-sm-6 d-inline-block justify-content-around" >
+                                <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3 ">{people.name}</h1>
+                                <div className="card-text"><AiOutlineArrowUp/> Height: {people.height}</div>
+                                <div className="card-text">Mass: {people.mass}</div>
+                                <div className="card-text">Eye Color: {people.eye_color}</div>
+                                <div className="card-text">Birth Year: {people.birth_year}</div>
                             </span>
                         )
                     })}

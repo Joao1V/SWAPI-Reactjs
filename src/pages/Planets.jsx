@@ -1,10 +1,6 @@
 import {useState, useEffect} from "react";
 import axios from "axios";
-import {Button, Modal, Pagination, Spinner} from "react-bootstrap";
-import { css } from "@emotion/react";
-
-import ModalResidentsPlanet from "../components/ModalResidentsPlanet";
-import {ClipLoader} from "react-spinners";
+import {Button, Modal, Pagination} from "react-bootstrap";
 import LoadingSpinner from "../components/Loading";
 
 const Planets = () => {
@@ -20,7 +16,6 @@ const Planets = () => {
 
     const [linkNextPage, setLinkNextPage] = useState()
     const [linkPreviousPage, setLinkPreviousPage] = useState()
-    const [total, setTotal] = useState(0)
     const [limit, setLimit] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
 
@@ -34,7 +29,6 @@ const Planets = () => {
         axios.get(`https://swapi.dev/api/planets/?page=${currentPage}`, {})
             .then((res) => {
                 console.log(res.data)
-                setTotal(res.data.count)
                 setLinkNextPage(res.data.next)
                 numberPageCurrent(res.data.count)
                 setLinkPreviousPage(res.data.previous)
@@ -103,7 +97,6 @@ const Planets = () => {
             aux.push(i)
         }
         setPages(aux)
-        console.log("passou por aq")
     }
 
 
@@ -118,40 +111,39 @@ const Planets = () => {
 
     useEffect(() => {
         getPlanets()
-        numberPageCurrent()
+
     }, [resident, films, currentPage])
 
-    console.log(pages)
-    console.log(currentPage)
 
     return (
         <div className="container mt-3">
+            <h1 style={{fontFamily:"Roboto", fontWeight:500}}>Planets</h1>
             {loading ? <LoadingSpinner loading={loading}/> :
                 <div>
                     {planets.map((planet, i) => {
                         return (
                             <span className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-4  d-inline-block ">
 
-                        <div key={i}>
-                            <h1 className="fs-3">{planet.name}</h1>
-                            <p className="card-text">População: {planet.population}</p>
-                            <p className="card-text">Clima: {planet.climate}</p>
-                            <p className="card-text">Gravidade: {planet.gravity}</p>
-                            <p className="card-text">Diâmetro: {planet.diameter}</p>
-                            <p className="card-text">Período Orbital: {planet.orbital_period}</p>
-                        </div>
+                                <div key={i} style={{fontFamily:"Roboto", fontWeight:300}}>
+                                    <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3">{planet.name}</h1>
+                                    <p className="card-text">População: {planet.population}</p>
+                                    <p className="card-text">Clima: {planet.climate}</p>
+                                    <p className="card-text">Gravidade: {planet.gravity}</p>
+                                    <p className="card-text">Diâmetro: {planet.diameter}</p>
+                                    <p className="card-text">Período Orbital: {planet.orbital_period}</p>
+                                </div>
 
-                        <div className="d-flex justify-content-between">
-                            <Button onClick={ () => {
-                                getResidents(planet.residents)
-                                handleShowRes()
-                            }} variant="secondary " size="sm">Exibir Habitantes</Button>
-                            <Button onClick={() => {
-                                getFilms(planet.films)
-                                handleShowFilms()
-                            }} variant="secondary " size="sm">Exibir Filmes</Button>
-                        </div>
-                    </span>
+                                <div className="d-flex justify-content-between mt-4">
+                                    <Button onClick={ () => {
+                                        getResidents(planet.residents)
+                                        handleShowRes()
+                                    }} variant="secondary " size="sm">Exibir Habitantes</Button>
+                                    <Button onClick={() => {
+                                        getFilms(planet.films)
+                                        handleShowFilms()
+                                    }} variant="secondary " size="sm">Exibir Filmes</Button>
+                                </div>
+                            </span>
 
                         )
                     })}
@@ -196,25 +188,21 @@ const Planets = () => {
                     </Modal.Footer>
                 </Modal>
             <div>
-                <div style={{display:"flex", justifyContent:"center", marginTop:"12px"}}>
-                   
-                    <Pagination>
-                        <div className="page-link " style={{cursor:"pointer"}} onClick={previousPage} >
-                            Anterior
+                <nav className="d-flex justify-content-center align-items-center my-2">
+                    <div className="pagination">
+                        <div className="page-item">
+                            <div className="page-link " style={{cursor:"pointer"}} onClick={previousPage}>Previous</div>
                         </div>
-
-                        <div className="d-inline-block">
-                            {pages.map((page, i) => (
-                                <div id={i} className="page-link d-inline-block " onClick={() => setCurrentPage(page)}>{page}</div>
+                        <div className="page-item">
+                            {pages.map((page) => (
+                                    <div className="page-link d-inline-block " style={{cursor:"pointer"}} onClick={() => setCurrentPage(page)}>{page}</div>
                             ))}
                         </div>
-
-                        <div className="page-link " style={{cursor:"pointer"}} onClick={nextPage} >
-                            Próximo
+                            <div className="page-item">
+                                <div className="page-link d-inline-block" style={{cursor:"pointer"}} onClick={nextPage}>Next</div>
+                            </div>
                         </div>
-                    </Pagination>
-                </div>
-                    
+                    </nav>
             </div>
         </div>
     )

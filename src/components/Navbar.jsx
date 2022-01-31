@@ -17,9 +17,12 @@ const NavbarComp = () => {
 
                             <Nav className="me-auto">
                                 <Nav.Link as={Link} to="/" className="fs-5" style={{ color:"#fff"}}>Home</Nav.Link>
-                                <Nav.Link as={Link} to="/people" className="fs-5" style={{ color:"#fff"}}>Pessoas</Nav.Link>
-                                <Nav.Link as={Link} to="/planets" className="fs-5" style={{ color:"#fff"}}> Planetas</Nav.Link>
-                                <Nav.Link as={Link} to="/species" className="fs-5" style={{ color:"#fff"}}>Espécies</Nav.Link>
+                                <Nav.Link as={Link} to="/people" className="fs-5" style={{ color:"#fff"}}>Characters</Nav.Link>
+                                <Nav.Link as={Link} to="/planets" className="fs-5" style={{ color:"#fff"}}>Planets</Nav.Link>
+                                <Nav.Link as={Link} to="/species" className="fs-5" style={{ color:"#fff"}}>Species</Nav.Link>
+                                <Nav.Link as={Link} to="/films" className="fs-5" style={{ color:"#fff"}}>Films</Nav.Link>
+                                <Nav.Link as={Link} to="/starships" className="fs-5" style={{ color:"#fff"}}>Starships</Nav.Link>
+
                             </Nav>
                     </Navbar.Collapse>
                 </Container>
