@@ -1,10 +1,9 @@
 
 const Home = () => {
 
-
     return (
-        <div>
-            Olá, seja bem-vindo(a) a SWAPI!
+        <div style={{height:"100vh"}} className="d-flex justify-content-center align-items-center">
+           Seja bem-vindo(a) a SWAPI! <span style={{fontSize:50}}>🚀🎉</span>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route, Link } from "react-router-dom";
-import NavbarComp from "./components/Navbar";
+import NavbarComp from "./components/Navbar/Navbar.jsx";
 import Planets from "./pages/Planets";
 import Species from "./pages/Species";
 import Peoples from "./pages/Peoples";

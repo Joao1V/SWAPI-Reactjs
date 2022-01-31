@@ -1,8 +1,8 @@
 import {useState, useEffect} from "react";
 import axios from "axios";
-import {Button, Modal, Pagination} from "react-bootstrap";
-import LoadingSpinner from "../components/Loading";
-import {isDisabled} from "@testing-library/user-event/dist/utils";
+import {Button, Modal} from "react-bootstrap";
+import SpinnerSaber from "../components/Loading/SpinnerSaber.jsx";
+import SpinnerCircle from "../components/Loading/SpinnerCircle";
 
 const Planets = () => {
 
@@ -14,13 +14,18 @@ const Planets = () => {
     const [showRes, setShowRes] = useState(false)
     const [showFilms, setShowFilms] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [loadingCircle, setLoadingCircle] = useState(false)
 
     const [linkNextPage, setLinkNextPage] = useState()
     const [linkPreviousPage, setLinkPreviousPage] = useState()
     const [limit, setLimit] = useState(10)
     const [currentPage, setCurrentPage] = useState(1)
 
-    const handleShowRes = () => setShowRes(true)
+    const handleShowRes = () => {
+        setLoading(true)
+        setShowRes(true)
+        setLoading(false)
+    }
     const handleCloseRes = () => setShowRes(false)
 
     const handleShowFilms = () => setShowFilms(true)
@@ -33,13 +38,16 @@ const Planets = () => {
                 numberPageCurrent(res.data.count)
                 setLinkPreviousPage(res.data.previous)
                 setPlanets(res.data.results)
-                setLoading(false)
-
+                setLoadingCircle(false)
+                timer()
             }).catch(function (error) {
             console.log(error);
         })
 
     }
+    const timer = setTimeout(() => {
+        setLoading(false)
+    }, 3000)
 
     const getResidents = (listResidents) => {
         let arr = []
@@ -53,7 +61,6 @@ const Planets = () => {
                     .then((res) => {
                         let aux = res.data.name
                         arr.push(aux)
-
                     })
 
                     .catch((error)=> {
@@ -81,12 +88,14 @@ const Planets = () => {
         setFilms(arrFilms)
     }
     const previousPage = () => {
+        setLoadingCircle(true)
         axios.get(`${linkPreviousPage}`, {})
             .then ((res) => {
                 setPlanets(res.data.results)
                 setLinkPreviousPage(res.data.previous)
                 let count = currentPage - 1
                 setCurrentPage(count)
+                setLoadingCircle(false)
 
             })
     }
@@ -100,8 +109,15 @@ const Planets = () => {
         setPages(aux)
     }
 
+    const pageLoading = () => {
+        setLoadingCircle(true)
+        currentPage()
+        setLoadingCircle(false)
+    }
+
 
     const nextPage = () => {
+        setLoadingCircle(true)
         axios.get(`${linkNextPage}`, {})
             .then ((res) => {
                 setPlanets(res.data.results)
@@ -109,6 +125,7 @@ const Planets = () => {
                 let count = currentPage + 1
                 setCurrentPage(count)
                 setLinkPreviousPage(res.data.previous)
+                setLoadingCircle(false)
             })
     }
 
@@ -120,44 +137,48 @@ const Planets = () => {
 
     return (
         <div className="container mt-3">
-            <h1 style={{fontFamily:"Roboto", fontWeight:500}}>Planets</h1>
-            {loading ? <LoadingSpinner loading={loading}/> :
+            <h1 style={{fontFamily:"Roboto", fontWeight:500}}>Planetas</h1>
+            {loadingCircle ? <SpinnerCircle loading={loadingCircle}/> :
                 <div>
-                    {planets.map((planet, i) => {
-                        return (
-                            <span className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-4  d-inline-block ">
 
-                                <div key={i} style={{fontFamily:"Roboto", fontWeight:300}}>
-                                    <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3">{planet.name}</h1>
-                                    <p className="card-text">Population: {planet.population}</p>
-                                    <p className="card-text">Climate: {planet.climate}</p>
-                                    <p className="card-text">Gravity: {planet.gravity}</p>
-                                    <p className="card-text">Diameter: {planet.diameter}</p>
-                                    <p className="card-text">Orbital Period: {planet.orbital_period}</p>
-                                </div>
+                    {loading ? <SpinnerSaber loading={loading}/> :
+                        <div>
+                            {planets.map((planet, i) => {
+                                return (
+                                    <span className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-4  d-inline-block ">
 
-                                <div className="d-flex justify-content-between mt-4">
-                                    <Button onClick={ () => {
-                                        getResidents(planet.residents)
-                                        handleShowRes()
-                                    }} variant="secondary " size="sm">Exibir Habitantes</Button>
-                                    <Button onClick={() => {
-                                        getFilms(planet.films)
-                                        handleShowFilms()
-                                    }} variant="secondary " size="sm">Exibir Filmes</Button>
-                                </div>
-                            </span>
+                                        <div key={i} style={{fontFamily:"Roboto", fontWeight:300}}>
+                                            <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3">{planet.name}</h1>
+                                            <p className="card-text">População: {planet.population}</p>
+                                            <p className="card-text">Clima: {planet.climate}</p>
+                                            <p className="card-text">Gravidade: {planet.gravity}</p>
+                                            <p className="card-text">Diametro: {planet.diameter}</p>
+                                            <p className="card-text">Periodo Orbital: {planet.orbital_period}</p>
+                                        </div>
 
-                        )
-                    })}
+                                        <div className="d-flex justify-content-between mt-4">
+                                            <Button onClick={ () => {
+                                                getResidents(planet.residents)
+                                                handleShowRes()
+                                            }} variant="secondary " size="sm">Exibir Habitantes</Button>
+                                            <Button onClick={() => {
+                                                getFilms(planet.films)
+                                                handleShowFilms()
+                                            }} variant="secondary " size="sm">Exibir Filmes</Button>
+                                        </div>
+                                    </span>
+
+                                )
+                            })}
+                        </div>
+                    }
                 </div>
             }
 
+            <div>
                 <Modal show={showRes} onHide={handleCloseRes} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>
-                            Habitantes do Planeta
-                        </Modal.Title>
+                        <Modal.Title>Habitantes do Planeta</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div>
@@ -166,17 +187,13 @@ const Planets = () => {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={handleCloseRes}>
-                            Fechar
-                        </Button>
+                        <Button onClick={handleCloseRes}>Fechar</Button>
                     </Modal.Footer>
                 </Modal>
 
                 <Modal show={showFilms} onHide={handleCloseFilms} centered >
                     <Modal.Header closeButton>
-                        <Modal.Title>
-                            Filmes do Planeta
-                        </Modal.Title>
+                        <Modal.Title>Filmes do Planeta</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div>
@@ -185,27 +202,30 @@ const Planets = () => {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={handleCloseFilms}>
-                            Fechar
-                        </Button>
+                        <Button onClick={handleCloseFilms}>Fechar</Button>
                     </Modal.Footer>
                 </Modal>
+            </div>
+
             <div>
                 <nav className="d-flex justify-content-center align-items-center my-2">
                     <ul className="pagination">
                         <li className="page-item">
-                            <a className={linkPreviousPage == null ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={previousPage}>Previous</a>
+                            <a className={linkPreviousPage == null ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={previousPage}>Anterior</a>
                         </li>
 
                         <div style={{display:"inline-flex"}}>
                             {pages.map((page) => (
                                 <li className={page === currentPage ? "page-item active" : "page item"}>
-                                    <a className='page-link d-inline-block'  style={{cursor:"pointer"}} onClick={() => setCurrentPage(page)}>{page}</a>
+                                    <a className='page-link d-inline-block'  style={{cursor:"pointer"}} onClick={() => {
+                                        setCurrentPage(page)
+                                        pageLoading()
+                                    }}>{page}</a>
                                 </li>
                             ))}
                         </div>
                             <li className="page-item">
-                                <a className={linkNextPage == null ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={nextPage}>Next</a>
+                                <a className={linkNextPage == null ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={nextPage}>Próximo</a>
                             </li>
                     </ul>
                 </nav>

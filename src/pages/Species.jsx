@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import axios from "axios"
 import {Button, Modal} from "react-bootstrap";
-import LoadingSpinner from "../components/Loading";
+import SpinnerSaber from "../components/Loading/SpinnerSaber.jsx";
 import planets from "./Planets";
 
 const Species = () => {
@@ -24,9 +24,13 @@ const Species = () => {
         axios.get(`https://swapi.dev/api/species`, {})
             .then((res) => {
                 setSpecies(res.data.results)
-                setLoading(false)
+                timer()
             })
     }
+
+    const timer = setTimeout(() => {
+        setLoading(false)
+    }, 3000)
 
     const getCharacter = (listChar) => {
 
@@ -64,32 +68,32 @@ const Species = () => {
     }, [characters, films])
     return (
         <div className="container mt-3">
-            <h1 style={{fontFamily:"Roboto", fontWeight:500}}>Species</h1>
-            {loading ? <LoadingSpinner loading={loading}/> :
+            <h1 style={{fontFamily:"Roboto", fontWeight:500}}>Espécies</h1>
+            {loading ? <SpinnerSaber loading={loading}/> :
                 <div>
                     {species.map((specie, i) => {
                         return (
                             <span className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-4  d-inline-block ">
                                 <div style={{fontFamily:"Roboto", fontWeight:300}} key={i}>
                                     <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3">{specie.name}</h1>
-                                    <p  className="card-text">Language: {specie.language}</p>
-                                    <p className="card-text">Classification: {specie.classification}</p>
-                                    <p className="card-text">Designation: {specie.designation}</p>
-                                    <p className="card-text">Average Height: {specie.average_height}</p>
-                                    <p className="card-text">Average Lifespan: {specie.average_lifespan}</p>
-                                    <p className="card-text">Hair Color: {specie.hair_colors}</p>
-                                    <p className="card-text">Eye Colors: {specie.eye_colors}</p>
-                                    <p className="card-text">Skin Colors: {specie.skin_colors}</p>
+                                    <p  className="card-text">Língua: {specie.language}</p>
+                                    <p className="card-text">Classificação: {specie.classification}</p>
+                                    <p className="card-text">Designação: {specie.designation}</p>
+                                    <p className="card-text">Altura média: {specie.average_height}</p>
+                                    <p className="card-text">Média de vida: {specie.average_lifespan}</p>
+                                    <p className="card-text">Cor dos cabelos: {specie.hair_colors}</p>
+                                    <p className="card-text">Cor dos olhos: {specie.eye_colors}</p>
+                                    <p className="card-text">Cor da pele: {specie.skin_colors}</p>
                                 </div>
                                 <div className="d-flex justify-content-between mt-4">
                                     <Button onClick={ () => {
                                         getCharacter(specie.people)
                                         handleShowChar()
-                                    }} variant="secondary" size="sm">Characters</Button>
+                                    }} variant="secondary" size="sm">Exibir Personagens</Button>
                                     <Button onClick={() => {
                                         getFilms(specie.films)
                                         handleShowFilms()
-                                    }} variant="secondary " size="sm">Movies</Button>
+                                    }} variant="secondary " size="sm">Filmes</Button>
                                 </div>
                         </span>
                         )
@@ -98,7 +102,7 @@ const Species = () => {
             }
             <Modal show={showChar} onHide={handleCloseChar} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Characters</Modal.Title>
+                    <Modal.Title>Personagens</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div>
@@ -112,7 +116,7 @@ const Species = () => {
 
             <Modal show={showFilms} onHide={handleCloseFilms} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Characters Movies</Modal.Title>
+                    <Modal.Title>Personagens do Filme</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div>

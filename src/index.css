@@ -3,10 +3,20 @@ body {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: auto;
+  height: 100vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#navCustom {
+color: #fff;
 }
+
+#navCustom:hover{
+  color: #f9e813;
+  transition: 0.3s ease-in-out;
+}
+
+#navCustom:focus{
+  color: #f9e813;
+  transition: 0.3s ease-in-out;
+}
+
