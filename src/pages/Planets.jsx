@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import {Button, Modal, Pagination} from "react-bootstrap";
 import LoadingSpinner from "../components/Loading";
+import {isDisabled} from "@testing-library/user-event/dist/utils";
 
 const Planets = () => {
 
@@ -28,7 +29,6 @@ const Planets = () => {
     const getPlanets = () => {
         axios.get(`https://swapi.dev/api/planets/?page=${currentPage}`, {})
             .then((res) => {
-                console.log(res.data)
                 setLinkNextPage(res.data.next)
                 numberPageCurrent(res.data.count)
                 setLinkPreviousPage(res.data.previous)
@@ -59,9 +59,7 @@ const Planets = () => {
                     .catch((error)=> {
                         console.log(error)
                     })
-
             }
-
         }
         setResident(arr)
     }
@@ -87,6 +85,9 @@ const Planets = () => {
             .then ((res) => {
                 setPlanets(res.data.results)
                 setLinkPreviousPage(res.data.previous)
+                let count = currentPage - 1
+                setCurrentPage(count)
+
             })
     }
 
@@ -105,6 +106,8 @@ const Planets = () => {
             .then ((res) => {
                 setPlanets(res.data.results)
                 setLinkNextPage(res.data.next)
+                let count = currentPage + 1
+                setCurrentPage(count)
                 setLinkPreviousPage(res.data.previous)
             })
     }
@@ -126,11 +129,11 @@ const Planets = () => {
 
                                 <div key={i} style={{fontFamily:"Roboto", fontWeight:300}}>
                                     <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3">{planet.name}</h1>
-                                    <p className="card-text">População: {planet.population}</p>
-                                    <p className="card-text">Clima: {planet.climate}</p>
-                                    <p className="card-text">Gravidade: {planet.gravity}</p>
-                                    <p className="card-text">Diâmetro: {planet.diameter}</p>
-                                    <p className="card-text">Período Orbital: {planet.orbital_period}</p>
+                                    <p className="card-text">Population: {planet.population}</p>
+                                    <p className="card-text">Climate: {planet.climate}</p>
+                                    <p className="card-text">Gravity: {planet.gravity}</p>
+                                    <p className="card-text">Diameter: {planet.diameter}</p>
+                                    <p className="card-text">Orbital Period: {planet.orbital_period}</p>
                                 </div>
 
                                 <div className="d-flex justify-content-between mt-4">
@@ -189,20 +192,23 @@ const Planets = () => {
                 </Modal>
             <div>
                 <nav className="d-flex justify-content-center align-items-center my-2">
-                    <div className="pagination">
-                        <div className="page-item">
-                            <div className="page-link " style={{cursor:"pointer"}} onClick={previousPage}>Previous</div>
-                        </div>
-                        <div className="page-item">
+                    <ul className="pagination">
+                        <li className="page-item">
+                            <a className={linkPreviousPage == null ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={previousPage}>Previous</a>
+                        </li>
+
+                        <div style={{display:"inline-flex"}}>
                             {pages.map((page) => (
-                                    <div className="page-link d-inline-block " style={{cursor:"pointer"}} onClick={() => setCurrentPage(page)}>{page}</div>
+                                <li className={page === currentPage ? "page-item active" : "page item"}>
+                                    <a className='page-link d-inline-block'  style={{cursor:"pointer"}} onClick={() => setCurrentPage(page)}>{page}</a>
+                                </li>
                             ))}
                         </div>
-                            <div className="page-item">
-                                <div className="page-link d-inline-block" style={{cursor:"pointer"}} onClick={nextPage}>Next</div>
-                            </div>
-                        </div>
-                    </nav>
+                            <li className="page-item">
+                                <a className={linkNextPage == null ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={nextPage}>Next</a>
+                            </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     )

@@ -11,7 +11,7 @@ import Starships from "./pages/Starships";
 
 const App = () => {
   return (
-    <div style={{backgroundColor: "#F0F2F5" , height:"100vh"}}>
+    <div style={{backgroundColor: "#F0F2F5" , height:"auto"}}>
         <NavbarComp/>
         <Routes>
                 <Route path="/" element={<Home/>}/>

@@ -18,6 +18,7 @@ const Starships = () => {
           .then((res) => {
               setStarShips(res.data.results)
               setLinkNextPage(res.data.next)
+              setLinkPreviousPage(res.data.previous)
               numberPageCurrent(res.data.count)
               setLoading(false)
           })
@@ -28,6 +29,8 @@ const Starships = () => {
             .then ((res) => {
                 setStarShips(res.data.results)
                 setLinkNextPage(res.data.next)
+                let count = currentPage + 1
+                setCurrentPage(count)
                 setLinkPreviousPage(res.data.previous)
             })
     }
@@ -35,13 +38,11 @@ const Starships = () => {
     const previousPage = () => {
         axios.get(`${linkPreviousPage}`, {})
             .then ((res) => {
-                if (linkPreviousPage === null) {
-                    setCurrentPage(3)
-                } else {
-                    setStarShips(res.data.results)
-                    setLinkNextPage(res.data.next)
-                    setLinkPreviousPage(res.data.previous)
-                }
+                setStarShips(res.data.results)
+                setLinkNextPage(res.data.next)
+                let count = currentPage - 1
+                setCurrentPage(count)
+                setLinkPreviousPage(res.data.previous)
             })
     }
 
@@ -78,19 +79,21 @@ const Starships = () => {
                 </div>
             }
             <nav className="d-flex justify-content-center align-items-center my-4">
-                <div className="pagination ">
-                    <div className="page-item">
-                        <div className="page-link " style={{cursor:"pointer"}} onClick={previousPage}>Previous</div>
-                    </div>
-                    <div className="page-item">
+                <ul className="pagination ">
+                    <li className="page-item">
+                        <a className={linkPreviousPage === null  ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={previousPage}>Previous</a>
+                    </li>
+                    <div style={{display:"inline-flex"}}>
                         {pages.map((page) => (
-                            <div className="page-link d-inline-block " style={{cursor:"pointer"}} onClick={() => setCurrentPage(page)}>{page}</div>
+                            <li className={page === currentPage ? "page-item active" : "page item"}>
+                                <a className='page-link d-inline-block'  style={{cursor:"pointer"}} onClick={() => setCurrentPage(page)}>{page}</a>
+                            </li>
                         ))}
                     </div>
-                    <div className="page-item">
-                        <div className="page-link d-inline-block" style={{cursor:"pointer"}} onClick={nextPage}>Next</div>
-                    </div>
-                </div>
+                    <li className="page-item">
+                        <a className={linkNextPage == null ? "page-link d-none" : "page-link"} style={{cursor:"pointer"}} onClick={nextPage}>Next</a>
+                    </li>
+                </ul>
             </nav>
         </div>
     )
