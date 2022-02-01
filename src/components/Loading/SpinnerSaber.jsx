@@ -4,7 +4,7 @@ const SpinnerSaber = () => {
 
    return (
        <SaberLoading>
-       <div id="loader">
+       <div id="loader" >
           <div className="ls-particles ls-part-1"/>
           <div className="ls-particles ls-part-2"/>
           <div className="ls-particles ls-part-3"/>

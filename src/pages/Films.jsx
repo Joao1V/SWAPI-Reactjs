@@ -31,7 +31,7 @@ const Films = () => {
                 <div>
                     {films.map((film) => {
                         return (
-                            <div style={{fontFamily:"Roboto", fontWeight:300}} className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-6 d-inline-block ">
+                            <div style={{fontFamily:"Roboto", fontWeight:300}} className="card-body card my-1 col-12 col-lg-6 d-inline-block ">
                                 <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="card-text">{film.title}</h1>
                                 <p className="card-text">Diretor: {film.director}</p>
                                 <p className="card-text">Episódio: {film.episode_id}</p>

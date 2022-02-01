@@ -145,8 +145,7 @@ const Planets = () => {
                         <div>
                             {planets.map((planet, i) => {
                                 return (
-                                    <span className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-4  d-inline-block ">
-
+                                    <span className="card-body card my-1 col-12 col-sm-6 col-lg-6  d-inline-block ">
                                         <div key={i} style={{fontFamily:"Roboto", fontWeight:300}}>
                                             <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3">{planet.name}</h1>
                                             <p className="card-text">População: {planet.population}</p>

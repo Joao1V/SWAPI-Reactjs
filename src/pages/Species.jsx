@@ -73,7 +73,7 @@ const Species = () => {
                 <div>
                     {species.map((specie, i) => {
                         return (
-                            <span className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-4  d-inline-block ">
+                            <div style={{boxSizing:"border-box"}} className="card-body card my-1 col-12 col-sm-6 col-md-6 col-xl-4 d-inline-block">
                                 <div style={{fontFamily:"Roboto", fontWeight:300}} key={i}>
                                     <h1 style={{fontFamily:"Roboto", fontWeight:400}} className="fs-3">{specie.name}</h1>
                                     <p  className="card-text">Língua: {specie.language}</p>
@@ -95,7 +95,7 @@ const Species = () => {
                                         handleShowFilms()
                                     }} variant="secondary " size="sm">Filmes</Button>
                                 </div>
-                        </span>
+                        </div>
                         )
                     })}
                 </div>

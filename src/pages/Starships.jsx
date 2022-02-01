@@ -84,7 +84,7 @@ const Starships = () => {
                         <div>
                             {starShips.map((ships) => {
                                 return (
-                                    <div style={{fontFamily:"Roboto", fontWeight:300}} className="card-body card my-1 col-12 col-sm-6 col-md-6 col-lg-6  d-inline-block ">
+                                    <div style={{fontFamily:"Roboto", fontWeight:300}} className="card-body card my-1 col-12 col-lg-6  d-inline-block ">
                                         <h2 style={{fontFamily:"Roboto", fontWeight:400}}>{ships.name}</h2>
                                         <p>Modelo: {ships.model}</p>
                                         <p>Fabricante: {ships.manufacturer}</p>
